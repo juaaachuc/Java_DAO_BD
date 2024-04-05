@@ -4,7 +4,7 @@ import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
-public final class Conexion {
+public final class Conexion<T> {
 
     private static final String bd = "tamp1_5_guimvc";
     private static final String usuario = "root";
@@ -43,7 +43,7 @@ public final class Conexion {
     }
 
     public ArrayList<ArrayList<String>> ejecutarConsulta(String query, String[] columnas) {
-        if (!query.isBlank()) {
+        if (abrir()) {
             try {
                 Statement st = this.conexion.createStatement();
                 ResultSet rs = st.executeQuery(query);
@@ -71,9 +71,42 @@ public final class Conexion {
                 return registros;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } finally {
+                cerrar();
             }
         }
 
         return null;
+    }
+
+    public boolean ejecutarActualizacion (String query, Object[] values) {
+        if (this.abrir()) {
+            try {
+                PreparedStatement pstm = this.conexion.prepareStatement(query);
+                int index = 1;
+
+                for (Object val: values) {
+                    switch (val.getClass().getName()) {
+                        case "java.lang.Integer":
+                            pstm.setInt(index, (Integer) val);
+                            break;
+                        case "java.lang.String":
+                            pstm.setString(index, (String) val);
+                            break;
+                    }
+                    index++;
+                }
+
+                pstm.execute();
+
+                return true;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                cerrar();
+            }
+        }
+
+        return false;
     }
 }

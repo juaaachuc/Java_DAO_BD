@@ -6,6 +6,19 @@ public class User {
 
     public User() {}
 
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String name, String email, String password, String created_at) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.created_at = created_at;
+    }
+
     public User(int id, String name, String email, String password, String created_at) {
         this.id = id;
         this.name = name;
@@ -54,11 +67,25 @@ public class User {
         this.created_at = created_at;
     }
 
+    /**
+     * Este metodo devuelve un array con los valores que se utilizaran para crear el modelo
+     * en base de datos
+     * @return Object[]
+     */
+    public Object[] getAll() {
+        return new Object[]{
+                getName(), getEmail(), getPassword()
+        };
+    }
+
     public String toString() {
         return "["
                     +
                         "ID: " + this.id + "\t" +
-                        "Nombre:" + this.name + "\t"
+                        "Nombre: " + this.name + "\t" +
+                        "Email: " + this.email + "\t" +
+                        "Password: " + this.password + "\t" +
+                        "Created at" + this.created_at + "\n"
                     +
                 "]";
     }
