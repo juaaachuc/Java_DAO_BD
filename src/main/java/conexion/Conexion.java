@@ -1,16 +1,17 @@
 package conexion;
 
-import javax.xml.transform.Result;
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public final class Conexion<T> {
-
-    private static final String bd = "tamp1_5_guimvc";
-    private static final String usuario = "root";
-    private static final String password = "";
-    private static final String host = "localhost";
-    private static final String puerto = "3306";
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String bd = dotenv.get("DB_NAME");
+    private static final String usuario = dotenv.get("DB_USER");
+    private static final String password = dotenv.get("DB_PASSWORD");
+    private static final String host = dotenv.get("DB_HOST");
+    private static final String puerto = dotenv.get("DB_PORT");
     private final String url;
 
     private Connection conexion;
